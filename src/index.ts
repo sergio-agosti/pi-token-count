@@ -170,7 +170,6 @@ class TokenCountFooter implements Component {
 		if (sessionName) pwd = `${pwd} • ${sessionName}`;
 
 		const model = this.ctx.model;
-		const usingSubscription = model ? this.ctx.modelRegistry.isUsingOAuth(model) : false;
 		const contextUsage = this.ctx.getContextUsage();
 		const contextWindow = contextUsage?.contextWindow ?? model?.contextWindow ?? 0;
 		const contextTokens = contextUsage?.tokens ?? null;
@@ -190,11 +189,10 @@ class TokenCountFooter implements Component {
 			colorContextDisplay(this.theme, contextSeverity, formatContextTokenDisplay(contextTokens)),
 			this.theme.fg(
 				"dim",
-				`${formatContextPercentDisplay(contextTokens, contextWindow)}/${formatContextWindowDisplay(contextWindow)}`,
+				`${formatContextPercentDisplay(contextTokens, contextWindow)}/${formatContextWindowDisplay(contextWindow)} used`,
 			),
-			this.theme.fg("dim", formatCostDisplay(totalCost, usingSubscription)),
+			this.theme.fg("dim", formatCostDisplay(totalCost)),
 		];
-		if (!compactionSettings.enabled) statsParts.push(this.theme.fg("dim", "manual compact"));
 		statsParts.push(formatModelReasoningPart(this.theme, this.footerData, entries, model));
 
 		let statsLine = joinFooterParts(this.theme, statsParts);

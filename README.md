@@ -2,19 +2,13 @@
 
 A focused Pi extension that replaces Pi's default footer with a pipe-separated footer that gives the current context token count its own field.
 
-Instead of combining percentage and context window like:
+The footer shows current context tokens first, followed by percentage/context-window used, cost spent, and active model/reasoning as separate fields:
 
 ```text
-↑12k ↓3k R44k $0.032 41.2%/200k (auto)
+84,000 tok | 7.6%/1.1M used | $0.60 spent | gpt-5.5/high
 ```
 
-it shows current context tokens first, followed by percentage/context-window, cost, and active model/reasoning as separate fields:
-
-```text
-84,000 tok | 7.6%/1.1M ctx | $0.60 | gpt-5.5/high
-```
-
-Pi's other default footer information is still preserved where possible: cwd, git branch, session name, provider when needed, subscription marker, and extension status lines.
+Pi's other default footer information is still preserved where possible: cwd, git branch, session name, provider when needed, and extension status lines.
 
 The current token count changes color based on a raw token threshold, not based on the context-window percentage:
 
@@ -86,5 +80,5 @@ Global settings live at `~/.pi/agent/settings.json`; project settings live at `.
 ## Behavior notes
 
 - This extension replaces the whole footer because Pi's extension API exposes footer replacement via `ctx.ui.setFooter()` rather than patching individual built-in footer fields.
-- The replacement footer intentionally mirrors Pi's default footer: cwd, git branch, session name, cost, model/provider, reasoning level, and extension status lines are preserved. Model and reasoning are combined at the end as `model/reasoning`.
+- The replacement footer intentionally mirrors Pi's default footer around the requested stats line: cwd, git branch, session name, model/provider, reasoning level, and extension status lines are preserved. Model and reasoning are combined at the end as `model/reasoning`.
 - Right after compaction, Pi may not know the current post-compaction token count until the next assistant response. In that case the footer shows `? tok`.

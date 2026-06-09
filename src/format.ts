@@ -46,7 +46,7 @@ export function formatContextTokenDisplay(tokens: number | null | undefined): st
 }
 
 export function formatContextWindowDisplay(contextWindow: number): string {
-	return `${contextWindow > 0 ? formatCompactTokens(contextWindow) : "?"} ctx`;
+	return contextWindow > 0 ? formatCompactTokens(contextWindow) : "?";
 }
 
 export function formatContextPercentDisplay(tokens: number | null | undefined, contextWindow: number): string {
@@ -55,8 +55,8 @@ export function formatContextPercentDisplay(tokens: number | null | undefined, c
 	return `${((tokens / contextWindow) * 100).toFixed(1)}%`;
 }
 
-export function formatCostDisplay(cost: number, usingSubscription: boolean): string {
+export function formatCostDisplay(cost: number): string {
 	const safeCost = Number.isFinite(cost) ? Math.max(0, cost) : 0;
 	const decimals = safeCost > 0 && safeCost < 0.01 ? 3 : 2;
-	return `$${safeCost.toFixed(decimals)}${usingSubscription ? " (sub)" : ""}`;
+	return `$${safeCost.toFixed(decimals)} spent`;
 }
