@@ -30,20 +30,6 @@ contextWindow - compaction.reserveTokens
 
 `compaction.reserveTokens` and `compaction.enabled` are read from Pi settings, including project overrides. You can also set an explicit raw dumb-zone token count for this extension.
 
-## Install locally
-
-From this repo:
-
-```bash
-pi install /Users/oscargabriel/Developer/projects/pi-token-count
-```
-
-Or test for one Pi run:
-
-```bash
-pi -e /Users/oscargabriel/Developer/projects/pi-token-count
-```
-
 ## Configuration
 
 ### `/dumb-zone` command
