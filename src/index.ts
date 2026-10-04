@@ -13,7 +13,8 @@ import { CompactionSettingsCache, setDumbZoneStartTokens, type DumbZoneSettingsS
 const STATUS_KEY = "context-tokens";
 
 // Pi joins status entries with a single space and has no per-entry separator,
-// so the divider is part of this extension's own text.
+// so the divider is part of this extension's own text. It is rendered in the
+// theme's normal text color rather than the severity color.
 const STATUS_SEPARATOR = "◆";
 
 function colorContextDisplay(theme: Theme, severity: ContextTokenSeverity, text: string): string {
@@ -104,14 +105,12 @@ export default function piTokenCount(pi: ExtensionAPI) {
 			dumbZoneStart,
 			compactionSettings.warningRatio,
 		);
-		ctx.ui.setStatus(
-			STATUS_KEY,
-			colorContextDisplay(
-				ctx.ui.theme,
-				contextSeverity,
-				`${formatContextTokenDisplay(contextTokens)} ${STATUS_SEPARATOR}`,
-			),
+		const tokenText = colorContextDisplay(
+			ctx.ui.theme,
+			contextSeverity,
+			formatContextTokenDisplay(contextTokens),
 		);
+		ctx.ui.setStatus(STATUS_KEY, `${tokenText} ${ctx.ui.theme.fg("text", STATUS_SEPARATOR)}`);
 	}
 
 	pi.registerCommand("dumb-zone", {
