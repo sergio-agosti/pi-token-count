@@ -12,6 +12,10 @@ import { CompactionSettingsCache, setDumbZoneStartTokens, type DumbZoneSettingsS
 // token count ahead of the usage readout.
 const STATUS_KEY = "context-tokens";
 
+// Pi joins status entries with a single space and has no per-entry separator,
+// so the divider is part of this extension's own text.
+const STATUS_SEPARATOR = "◆";
+
 function colorContextDisplay(theme: Theme, severity: ContextTokenSeverity, text: string): string {
 	switch (severity) {
 		case "dumb":
@@ -102,7 +106,11 @@ export default function piTokenCount(pi: ExtensionAPI) {
 		);
 		ctx.ui.setStatus(
 			STATUS_KEY,
-			colorContextDisplay(ctx.ui.theme, contextSeverity, formatContextTokenDisplay(contextTokens)),
+			colorContextDisplay(
+				ctx.ui.theme,
+				contextSeverity,
+				`${formatContextTokenDisplay(contextTokens)} ${STATUS_SEPARATOR}`,
+			),
 		);
 	}
 
