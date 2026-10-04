@@ -1,14 +1,12 @@
 # pi-token-count
 
-A focused Pi extension that replaces Pi's default footer with a pipe-separated footer that gives the current context token count its own field.
-
-The footer shows current context tokens first, followed by percentage/context-window used, cost spent, and active model/reasoning as separate fields:
+A focused Pi extension that shows the current context token count on Pi's extension status line, colored by a raw token threshold.
 
 ```text
-84,000 tok | 7.6%/1.1M used | $0.60 spent | gpt-5.5/high
+84,000 tok   <other extension statuses>   <usage readout>
 ```
 
-Pi's other default footer information is still preserved where possible: cwd, git branch, session name, provider when needed, and extension status lines.
+This is a fork of [oscabriel/pi-token-count](https://github.com/oscabriel/pi-token-count) that publishes the count through `ctx.ui.setStatus()` instead of replacing Pi's footer with `ctx.ui.setFooter()`. Pi has no API to patch individual built-in footer fields, and a replacement footer shadows every upstream footer change, so the count lives on the status line and Pi's built-in footer stays authoritative.
 
 The current token count changes color based on a raw token threshold, not based on the context-window percentage:
 
@@ -79,6 +77,7 @@ Global settings live at `~/.pi/agent/settings.json`; project settings live at `.
 
 ## Behavior notes
 
-- This extension replaces the whole footer because Pi's extension API exposes footer replacement via `ctx.ui.setFooter()` rather than patching individual built-in footer fields.
-- The replacement footer intentionally mirrors Pi's default footer around the requested stats line: cwd, git branch, session name, model/provider, reasoning level, and extension status lines are preserved. Model and reasoning are combined at the end as `model/reasoning`.
-- Right after compaction, Pi may not know the current post-compaction token count until the next assistant response. In that case the footer shows `? tok`.
+- The count is published with `ctx.ui.setStatus()` under the key `context-tokens` rather than replacing the footer with `ctx.ui.setFooter()`.
+- Pi sorts the extension status line alphabetically by key. `context-tokens` is chosen to sort before pi-quotas' `pi-quotas-usage` entry, so the token count leads the line and the usage readout follows it.
+- Because Pi's built-in footer is left in place, its own fields keep working and keep tracking upstream: input/output/cache token totals, cache-hit rate, subscription and auto-compaction markers, the experimental marker, and the routed-model indicator.
+- Right after compaction, Pi may not know the current post-compaction token count until the next assistant response. In that case the status shows `? tok`.

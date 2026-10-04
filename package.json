@@ -1,7 +1,7 @@
 {
   "name": "pi-token-count",
   "version": "0.1.2",
-  "description": "Pi extension that shows tokens, context usage, cost spent, and model/reasoning in the footer.",
+  "description": "Pi extension that shows the current context token count on the status line, colored by a dumb-zone token threshold.",
   "type": "module",
   "keywords": [
     "pi-package",
