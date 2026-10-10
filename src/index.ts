@@ -6,6 +6,7 @@ import {
 	type ContextTokenSeverity,
 } from "./format.ts";
 import { CompactionSettingsCache, setDumbZoneStartTokens, type DumbZoneSettingsScope } from "./settings.ts";
+import { CONTEXT_TOKENS_UPDATED_EVENT, buildContextFeed } from "./feed.ts";
 
 // Pi renders the extension status line sorted alphabetically by key, so this
 // key is chosen to sort before pi-quotas' "pi-quotas-usage" entry and keep the
@@ -106,6 +107,19 @@ export default function piTokenCount(pi: ExtensionAPI) {
 			formatContextTokenDisplay(contextTokens),
 		);
 		ctx.ui.setStatus(STATUS_KEY, tokenText);
+		// Published alongside the text so a consumer can place the dumb-zone tick
+		// from the same threshold that coloured it. Re-emitted whenever the
+		// threshold changes, so the tick moves with the setting.
+		pi.events.emit(
+			CONTEXT_TOKENS_UPDATED_EVENT,
+			buildContextFeed({
+				statusKey: STATUS_KEY,
+				tokens: contextTokens,
+				contextWindow,
+				dumbZoneStart,
+				severity: contextSeverity,
+			}),
+		);
 	}
 
 	pi.registerCommand("dumb-zone", {
