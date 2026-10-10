@@ -3,7 +3,7 @@
 A focused Pi extension that shows the current context token count on Pi's extension status line, colored by a raw token threshold.
 
 ```text
-84,000 tok ◆ <usage readout>
+84,000 tok <usage readout>
 ```
 
 This is a fork of [oscabriel/pi-token-count](https://github.com/oscabriel/pi-token-count) that publishes the count through `ctx.ui.setStatus()` instead of replacing Pi's footer with `ctx.ui.setFooter()`. Pi has no API to patch individual built-in footer fields, and a replacement footer shadows every upstream footer change, so the count lives on the status line and Pi's built-in footer stays authoritative.
@@ -79,6 +79,6 @@ Global settings live at `~/.pi/agent/settings.json`; project settings live at `.
 
 - The count is published with `ctx.ui.setStatus()` under the key `context-tokens` rather than replacing the footer with `ctx.ui.setFooter()`.
 - Pi sorts the extension status line alphabetically by key. `context-tokens` is chosen to sort before pi-quotas' `pi-quotas-usage` entry, so the token count leads the line and the usage readout follows it.
-- Pi joins status entries with a single space and offers no per-entry separator, so the `◆` divider is appended to this extension's own text. It renders in the theme's dim color, not the severity color, matching pi-rewind's `◆ N checkpoints` status. It is unconditional: if no usage status is present, the line ends with `84,000 tok ◆`.
+- Pi joins status entries with a single space and offers no per-entry separator, so this extension appends nothing after the count and the usage readout follows it directly.
 - Because Pi's built-in footer is left in place, its own fields keep working and keep tracking upstream: input/output/cache token totals, cache-hit rate, subscription and auto-compaction markers, the experimental marker, and the routed-model indicator.
 - Right after compaction, Pi may not know the current post-compaction token count until the next assistant response. In that case the status shows `? tok`.
